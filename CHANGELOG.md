@@ -1,0 +1,27 @@
+# 变更日志
+
+本项目的所有重要变更都会记录在此文件中。
+
+格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
+版本遵循[语义化版本](https://semver.org/lang/zh-CN/)。
+
+## [Unreleased]
+
+## [1.0.0] - 2026-08-22
+
+### 新增
+
+- 基于标准库 `iter` 的 `Seq`、`Seq2` 和 `Pair` 类型。
+- 覆盖映射、展开、筛选、去重、窗口、排序、分组、归约、检索和物化的完整操作集。
+- `Enumerate`、`KeyBy` 和 `Associate` 等类型安全键转换能力。
+- `Drop`、`UniqBy`、`SomeBy`、`EveryBy` 和 `Length` 等与 `lo/it` 一致的操作名称。
+- 切片、map、标准迭代器、Pair 切片、可变参数和整数区间数据源。
+- `Seq` 与 `Seq2` 对称的查询、短路和遍历操作。
+- 可执行示例、行为测试、基准测试和 CI。
+- 为全部公开函数和方法提供由 `go test` 验证的 Go Example。
+- 停止传播、短路、空序列、计数边界和重复键契约测试。
+- `RangeWithSteps`、窗口、反转、去重、Pair 往返、稳定排序和分组性质的 Fuzz 测试。
+- 固定版本的本地变异测试与 CRAP 报告脚本。
+
+[Unreleased]: https://github.com/norniastar/lix/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/norniastar/lix/releases/tag/v1.0.0
