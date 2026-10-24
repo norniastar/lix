@@ -62,7 +62,7 @@ func TestRejectEnumerateKeyByAndAssociate(t *testing.T) {
 	indexed := users.
 		Reject(func(value user) bool { return value.ID == 2 }).
 		KeyBy(func(value user) int { return value.ID }).
-		Map(func(_ int, value user) string { return value.Name }).
+		MapValues(func(_ int, value user) string { return value.Name }).
 		Collect()
 	if !maps.Equal(indexed, map[int]string{1: "one", 3: "three"}) {
 		t.Fatalf("indexed result = %v", indexed)
@@ -127,7 +127,7 @@ func TestSeq2Transformations(t *testing.T) {
 		Filter(func(_ string, value int) bool {
 			return value%2 != 0
 		}).
-		Map(func(key string, value int) string {
+		MapValues(func(key string, value int) string {
 			return key + strconv.Itoa(value)
 		}).
 		MapKeys(func(key string, _ string) string {
