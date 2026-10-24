@@ -3,7 +3,7 @@
 [![CI](https://github.com/norniastar/lix/actions/workflows/ci.yml/badge.svg)](https://github.com/norniastar/lix/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/norniastar/lix.svg)](https://pkg.go.dev/github.com/norniastar/lix)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/github/v/tag/norniastar/lix)](https://github.com/norniastar/lix/releases/tag/v1.0.0)
+[![Version](https://img.shields.io/github/v/tag/norniastar/lix)](https://github.com/norniastar/lix/releases/tag/v1.0.1)
 
 `lix` 是基于 Go 1.27 泛型方法和标准库 `iter` 构建的类型安全惰性集合库。
 它不使用反射，不进行运行时类型分派，错误的回调类型会在编译期被拒绝。
@@ -169,8 +169,8 @@ Go 会拒绝导致方法集无限实例化的泛型方法，因此 `GroupBy`、`
 
 ## 兼容性
 
-当前稳定版本为 `v1.0.0`。项目遵循语义化版本；`v1` 内保持公开 API
-向后兼容，破坏性变更只会在新的主版本中发布。
+当前稳定版本为 `v1.0.1`。项目遵循语义化版本；`v1` 内保持公开 API
+向后兼容，破坏性变更只会在新的主版本中发布。`v1.0.0` 已撤回，请勿使用。
 
 ## 质量验证
 

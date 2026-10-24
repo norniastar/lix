@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-24
+
+### 撤回
+
+- 撤回 `v1.0.0`：`Seq2.Map` 已重命名为 `Seq2.MapValues`。`v1.0.0` 尚未投入使用，
+  因此以撤回加补丁版本的方式发布，而不升级主版本。
+
 ### 变更
 
 - **破坏性**：`Seq2.Map` 重命名为 `Seq2.MapValues`，与 `Seq2.MapKeys` 和 `lo.MapValues` 的命名保持一致；
@@ -46,5 +53,6 @@
 - `RangeWithSteps`、窗口、反转、去重、Pair 往返、稳定排序和分组性质的 Fuzz 测试。
 - 固定版本的本地变异测试与 CRAP 报告脚本。
 
-[Unreleased]: https://github.com/norniastar/lix/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/norniastar/lix/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/norniastar/lix/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/norniastar/lix/releases/tag/v1.0.0
