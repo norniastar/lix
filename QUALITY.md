@@ -14,6 +14,20 @@
 go test -race -coverprofile=coverage.out ./...
 ```
 
+## Benchmark
+
+性能改动必须用基准数据证明，并同时比较 ns/op、B/op 和 allocs/op：
+
+```bash
+go test -run '^$' -bench . -count=6 ./... > old.txt
+# 应用改动后
+go test -run '^$' -bench . -count=6 ./... > new.txt
+benchstat old.txt new.txt
+```
+
+`BenchmarkPipelineHandwritten` 是手写循环基线，用于衡量迭代器组合的额外开销；
+`UniqBy`、`GroupBy` 和 `GroupPairsBy` 覆盖 16 个、365 个和几乎全部唯一三种键基数。
+
 ## Fuzz
 
 运行全部 Fuzz 目标，每个目标默认执行三秒：
@@ -57,11 +71,11 @@ MUTATION_TIMEOUT_COEFFICIENT=20 \
 
 当前基线：
 
-- 可运行变异体：47
-- 被测试杀死：43
+- 可运行变异体：37（排序实现合并为共享帮助函数后，由 47 减少）
+- 被测试杀死：33
 - 等价变异体：4
 - 未覆盖、超时、不可运行：0
-- Gremlins 原始 efficacy：91.49%
+- Gremlins 原始 efficacy：89.19%
 - 排除已审核等价变异后的有效杀伤率：100%
 
 ## CRAP

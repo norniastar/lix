@@ -13,18 +13,22 @@ func (s Seq[V]) Reduce[U any](reducer func(U, V) U, initial U) U {
 // 遍历返回序列时会消费源序列，分组按键首次出现的顺序产出。
 func GroupBy[V any, K comparable](s Seq[V], selector func(V) K) Seq2[K, []V] {
 	return func(yield func(K, []V) bool) {
-		groups := make(map[K][]V)
-		keys := make([]K, 0)
+		// index 记录键在 groups 中的位置，使每个元素只需一次 map 查找。
+		index := make(map[K]int)
+		groups := make([]Pair[K, []V], 0)
 		for value := range s {
-			key := selector(value)
-			if _, exists := groups[key]; !exists {
-				keys = append(keys, key)
+			group := selector(value)
+			position, exists := index[group]
+			if !exists {
+				position = len(groups)
+				index[group] = position
+				groups = append(groups, Pair[K, []V]{Key: group})
 			}
-			groups[key] = append(groups[key], value)
+			groups[position].Value = append(groups[position].Value, value)
 		}
 
-		for _, key := range keys {
-			if !yield(key, groups[key]) {
+		for _, group := range groups {
+			if !yield(group.Key, group.Value) {
 				return
 			}
 		}
@@ -78,18 +82,22 @@ func (s Seq2[K, V]) Reduce[U any](reducer func(U, K, V) U, initial U) U {
 // 遍历返回序列时会消费源序列，分组按键首次出现的顺序产出。
 func GroupPairsBy[K comparable, V any, G comparable](s Seq2[K, V], selector func(K, V) G) Seq2[G, []V] {
 	return func(yield func(G, []V) bool) {
-		groups := make(map[G][]V)
-		keys := make([]G, 0)
+		// index 记录键在 groups 中的位置，使每个元素只需一次 map 查找。
+		index := make(map[G]int)
+		groups := make([]Pair[G, []V], 0)
 		for key, value := range s {
 			group := selector(key, value)
-			if _, exists := groups[group]; !exists {
-				keys = append(keys, group)
+			position, exists := index[group]
+			if !exists {
+				position = len(groups)
+				index[group] = position
+				groups = append(groups, Pair[G, []V]{Key: group})
 			}
-			groups[group] = append(groups[group], value)
+			groups[position].Value = append(groups[position].Value, value)
 		}
 
-		for _, group := range keys {
-			if !yield(group, groups[group]) {
+		for _, group := range groups {
+			if !yield(group.Key, group.Value) {
 				return
 			}
 		}

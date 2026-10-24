@@ -193,7 +193,7 @@ func (s Seq2[K, V]) FlatMap2[L comparable, U any](mapper func(K, V) Seq2[L, U]) 
 	}
 }
 
-// Take 惰性返回至多 count 个键值对。
+// Take 惰性返回至多 count 个键值对；count 非正时返回空序列。
 func (s Seq2[K, V]) Take(count int) Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		if count <= 0 {
@@ -213,7 +213,7 @@ func (s Seq2[K, V]) Take(count int) Seq2[K, V] {
 	}
 }
 
-// Drop 惰性跳过前 count 个键值对。
+// Drop 惰性跳过前 count 个键值对；count 非正时返回全部键值对。
 func (s Seq2[K, V]) Drop(count int) Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		skipped := 0

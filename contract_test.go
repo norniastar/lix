@@ -1,6 +1,7 @@
 package lix_test
 
 import (
+	"fmt"
 	"maps"
 	"slices"
 	"testing"
@@ -33,6 +34,160 @@ func trackedPairs(produced *int) lix.Seq2[string, int] {
 			}
 		}
 	})
+}
+
+// 每个用例只构造中间序列，并以方法值返回其遍历入口；
+// 方法值会求值接收者，但不会调用遍历。
+func TestSeqIntermediateOperationsDeferSourceConsumption(t *testing.T) {
+	identity := func(value int) int { return value }
+	tests := []struct {
+		name      string
+		construct func(lix.Seq[int]) func() int
+	}{
+		{name: "Map", construct: func(s lix.Seq[int]) func() int { return s.Map(identity).Length }},
+		{name: "Filter", construct: func(s lix.Seq[int]) func() int { return s.Filter(func(int) bool { return true }).Length }},
+		{name: "Reject", construct: func(s lix.Seq[int]) func() int { return s.Reject(func(int) bool { return false }).Length }},
+		{name: "FlatMap", construct: func(s lix.Seq[int]) func() int {
+			return s.FlatMap(func(value int) lix.Seq[int] { return lix.Of(value) }).Length
+		}},
+		{name: "FlatMap2", construct: func(s lix.Seq[int]) func() int {
+			return s.FlatMap2(func(value int) lix.Seq2[int, int] {
+				return lix.FromPairs([]lix.Pair[int, int]{{Key: value, Value: value}})
+			}).Length
+		}},
+		{name: "Take", construct: func(s lix.Seq[int]) func() int { return s.Take(2).Length }},
+		{name: "Drop", construct: func(s lix.Seq[int]) func() int { return s.Drop(1).Length }},
+		{name: "Enumerate", construct: func(s lix.Seq[int]) func() int { return s.Enumerate().Length }},
+		{name: "KeyBy", construct: func(s lix.Seq[int]) func() int { return s.KeyBy(identity).Length }},
+		{name: "Associate", construct: func(s lix.Seq[int]) func() int {
+			return s.Associate(func(value int) (int, int) { return value, value }).Length
+		}},
+		{name: "UniqBy", construct: func(s lix.Seq[int]) func() int { return s.UniqBy(identity).Length }},
+		{name: "SortBy", construct: func(s lix.Seq[int]) func() int { return s.SortBy(identity).Length }},
+		{name: "SortByDescending", construct: func(s lix.Seq[int]) func() int { return s.SortByDescending(identity).Length }},
+		{name: "Reverse", construct: func(s lix.Seq[int]) func() int { return s.Reverse().Length }},
+		{name: "GroupBy", construct: func(s lix.Seq[int]) func() int { return lix.GroupBy(s, identity).Length }},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			produced := 0
+			traverse := test.construct(trackedValues(&produced))
+			if produced != 0 {
+				t.Fatalf("construction consumed %d values, want 0", produced)
+			}
+			if traverse() == 0 || produced == 0 {
+				t.Fatalf("traversal produced %d source values, want the source to be consumed", produced)
+			}
+		})
+	}
+}
+
+func TestSeq2IntermediateOperationsDeferSourceConsumption(t *testing.T) {
+	byValue := func(_ string, value int) int { return value }
+	tests := []struct {
+		name      string
+		construct func(lix.Seq2[string, int]) func() int
+	}{
+		{name: "Map", construct: func(s lix.Seq2[string, int]) func() int { return s.Map(byValue).Length }},
+		{name: "MapKeys", construct: func(s lix.Seq2[string, int]) func() int { return s.MapKeys(byValue).Length }},
+		{name: "Filter", construct: func(s lix.Seq2[string, int]) func() int {
+			return s.Filter(func(string, int) bool { return true }).Length
+		}},
+		{name: "Reject", construct: func(s lix.Seq2[string, int]) func() int {
+			return s.Reject(func(string, int) bool { return false }).Length
+		}},
+		{name: "FlatMap", construct: func(s lix.Seq2[string, int]) func() int {
+			return s.FlatMap(func(_ string, value int) lix.Seq[int] { return lix.Of(value) }).Length
+		}},
+		{name: "FlatMap2", construct: func(s lix.Seq2[string, int]) func() int {
+			return s.FlatMap2(func(key string, value int) lix.Seq2[string, int] {
+				return lix.FromPairs([]lix.Pair[string, int]{{Key: key, Value: value}})
+			}).Length
+		}},
+		{name: "Take", construct: func(s lix.Seq2[string, int]) func() int { return s.Take(2).Length }},
+		{name: "Drop", construct: func(s lix.Seq2[string, int]) func() int { return s.Drop(1).Length }},
+		{name: "UniqBy", construct: func(s lix.Seq2[string, int]) func() int { return s.UniqBy(byValue).Length }},
+		{name: "SortBy", construct: func(s lix.Seq2[string, int]) func() int { return s.SortBy(byValue).Length }},
+		{name: "SortByDescending", construct: func(s lix.Seq2[string, int]) func() int {
+			return s.SortByDescending(byValue).Length
+		}},
+		{name: "Reverse", construct: func(s lix.Seq2[string, int]) func() int { return s.Reverse().Length }},
+		{name: "GroupPairsBy", construct: func(s lix.Seq2[string, int]) func() int {
+			return lix.GroupPairsBy(s, byValue).Length
+		}},
+		{name: "Keys", construct: func(s lix.Seq2[string, int]) func() int { return s.Keys().Length }},
+		{name: "Values", construct: func(s lix.Seq2[string, int]) func() int { return s.Values().Length }},
+		{name: "Pairs", construct: func(s lix.Seq2[string, int]) func() int { return lix.Pairs(s).Length }},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			produced := 0
+			traverse := test.construct(trackedPairs(&produced))
+			if produced != 0 {
+				t.Fatalf("construction consumed %d pairs, want 0", produced)
+			}
+			if traverse() == 0 || produced == 0 {
+				t.Fatalf("traversal produced %d source pairs, want the source to be consumed", produced)
+			}
+		})
+	}
+}
+
+func replaySeq[V any](s lix.Seq[V]) func() string {
+	return func() string { return fmt.Sprint(s.Collect()) }
+}
+
+func replaySeq2[K comparable, V any](s lix.Seq2[K, V]) func() string {
+	return func() string { return fmt.Sprint(lix.Pairs(s).Collect()) }
+}
+
+// 带内部状态的派生序列必须在每次遍历时重新初始化状态。
+func TestStatefulOperationsAreReplayable(t *testing.T) {
+	values := lix.Of(3, 1, 2, 3, 1)
+	pairs := lix.FromPairs([]lix.Pair[string, int]{
+		{Key: "c", Value: 3},
+		{Key: "a", Value: 1},
+		{Key: "b", Value: 2},
+		{Key: "c2", Value: 3},
+		{Key: "a2", Value: 1},
+	})
+	identity := func(value int) int { return value }
+	byValue := func(_ string, value int) int { return value }
+
+	tests := []struct {
+		name     string
+		traverse func() string
+	}{
+		{name: "Seq/Take", traverse: replaySeq(values.Take(2))},
+		{name: "Seq/Drop", traverse: replaySeq(values.Drop(2))},
+		{name: "Seq/Enumerate", traverse: replaySeq2(values.Enumerate())},
+		{name: "Seq/UniqBy", traverse: replaySeq(values.UniqBy(identity))},
+		{name: "Seq/SortBy", traverse: replaySeq(values.SortBy(identity))},
+		{name: "Seq/SortByDescending", traverse: replaySeq(values.SortByDescending(identity))},
+		{name: "Seq/Reverse", traverse: replaySeq(values.Reverse())},
+		{name: "Seq/GroupBy", traverse: replaySeq2(lix.GroupBy(values, identity))},
+		{name: "Seq2/Take", traverse: replaySeq2(pairs.Take(2))},
+		{name: "Seq2/Drop", traverse: replaySeq2(pairs.Drop(2))},
+		{name: "Seq2/UniqBy", traverse: replaySeq2(pairs.UniqBy(byValue))},
+		{name: "Seq2/SortBy", traverse: replaySeq2(pairs.SortBy(byValue))},
+		{name: "Seq2/SortByDescending", traverse: replaySeq2(pairs.SortByDescending(byValue))},
+		{name: "Seq2/Reverse", traverse: replaySeq2(pairs.Reverse())},
+		{name: "Seq2/GroupPairsBy", traverse: replaySeq2(lix.GroupPairsBy(pairs, byValue))},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			first := test.traverse()
+			if first == "[]" {
+				t.Fatal("first traversal is empty; the case does not exercise state")
+			}
+			if second := test.traverse(); second != first {
+				t.Fatalf("second traversal = %s, want %s", second, first)
+			}
+		})
+	}
 }
 
 func TestSeqStreamingOperationsPropagateStop(t *testing.T) {

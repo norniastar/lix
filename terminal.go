@@ -1,12 +1,14 @@
 package lix
 
+import (
+	"maps"
+	"slices"
+)
+
 // Collect 消费 s，并以切片形式返回其中的值。
 func (s Seq[V]) Collect() []V {
-	result := make([]V, 0)
-	for value := range s {
-		result = append(result, value)
-	}
-	return result
+	// 与 slices.Collect 不同，空序列返回非 nil 的空切片。
+	return slices.AppendSeq(make([]V, 0), s.Iter())
 }
 
 // First 返回 s 中的第一个值。
@@ -91,11 +93,7 @@ func (s Seq[V]) ForEach(action func(V)) {
 // Collect 消费 s，并以 map 形式返回其中的键值对。
 // 如果 s 中存在重复键，则保留最后一个值。
 func (s Seq2[K, V]) Collect() map[K]V {
-	result := make(map[K]V)
-	for key, value := range s {
-		result[key] = value
-	}
-	return result
+	return maps.Collect(s.Iter())
 }
 
 // First 返回 s 中的第一个键值对。
