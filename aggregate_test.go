@@ -107,3 +107,31 @@ func TestSeq2ReduceAndGroupBy(t *testing.T) {
 		t.Fatalf("odd group length = %d, want 2", len(groups["odd"]))
 	}
 }
+
+func TestGroupPairsByKeepsFirstKeyOrderAndValueOrder(t *testing.T) {
+	sequence := lix.FromPairs([]lix.Pair[string, int]{
+		{Key: "2026-10-02", Value: 3},
+		{Key: "2026-10-01", Value: 1},
+		{Key: "2026-10-02", Value: 4},
+		{Key: "2026-10-01", Value: 2},
+		{Key: "2026-10-03", Value: 5},
+	})
+
+	groups := lix.Pairs(lix.GroupPairsBy(sequence, func(day string, _ int) string {
+		return day
+	})).Collect()
+
+	want := []lix.Pair[string, []int]{
+		{Key: "2026-10-02", Value: []int{3, 4}},
+		{Key: "2026-10-01", Value: []int{1, 2}},
+		{Key: "2026-10-03", Value: []int{5}},
+	}
+	if len(groups) != len(want) {
+		t.Fatalf("group count = %d, want %d", len(groups), len(want))
+	}
+	for index := range groups {
+		if groups[index].Key != want[index].Key || !slices.Equal(groups[index].Value, want[index].Value) {
+			t.Fatalf("group %d = %v, want %v", index, groups[index], want[index])
+		}
+	}
+}

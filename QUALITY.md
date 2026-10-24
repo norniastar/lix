@@ -26,7 +26,7 @@ benchstat old.txt new.txt
 ```
 
 `BenchmarkPipelineHandwritten` 是手写循环基线，用于衡量迭代器组合的额外开销；
-`UniqBy`、`GroupBy` 和 `GroupPairsBy` 分别覆盖键大量重复和几乎全部唯一两种情况。
+`UniqBy`、`GroupBy` 和 `GroupPairsBy` 覆盖 16 个、365 个和几乎全部唯一三种键基数。
 
 ## Fuzz
 

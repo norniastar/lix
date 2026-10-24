@@ -26,9 +26,9 @@ func benchmarkValues() []int {
 	return values
 }
 
-// benchmarkCardinalities 覆盖键大量重复和几乎全部唯一两种情况，
+// benchmarkCardinalities 覆盖键大量重复、中等重复（约按天聚合一年）和几乎全部唯一三种情况，
 // 分别对应 map 查找以命中为主和以插入为主的路径。
-var benchmarkCardinalities = []int{16, benchmarkSize}
+var benchmarkCardinalities = []int{16, 365, benchmarkSize}
 
 func BenchmarkPipeline(b *testing.B) {
 	source := make([]int, 1_000)
