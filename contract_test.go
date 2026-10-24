@@ -89,7 +89,7 @@ func TestSeq2IntermediateOperationsDeferSourceConsumption(t *testing.T) {
 		name      string
 		construct func(lix.Seq2[string, int]) func() int
 	}{
-		{name: "Map", construct: func(s lix.Seq2[string, int]) func() int { return s.Map(byValue).Length }},
+		{name: "MapValues", construct: func(s lix.Seq2[string, int]) func() int { return s.MapValues(byValue).Length }},
 		{name: "MapKeys", construct: func(s lix.Seq2[string, int]) func() int { return s.MapKeys(byValue).Length }},
 		{name: "Filter", construct: func(s lix.Seq2[string, int]) func() int {
 			return s.Filter(func(string, int) bool { return true }).Length
@@ -236,8 +236,8 @@ func TestSeq2StreamingOperationsPropagateStop(t *testing.T) {
 		run          func(lix.Seq2[string, int]) int
 		wantProduced int
 	}{
-		{name: "Map", run: func(s lix.Seq2[string, int]) int {
-			return s.Map(func(_ string, value int) int { return value * 2 }).Take(1).Length()
+		{name: "MapValues", run: func(s lix.Seq2[string, int]) int {
+			return s.MapValues(func(_ string, value int) int { return value * 2 }).Take(1).Length()
 		}, wantProduced: 1},
 		{name: "MapKeys", run: func(s lix.Seq2[string, int]) int {
 			return s.MapKeys(func(_ string, value int) int { return value }).Take(1).Length()

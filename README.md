@@ -64,7 +64,7 @@ type Pair[K comparable, V any] struct {
 | 类别 | `Seq` | `Seq2` 或顶层函数 |
 | --- | --- | --- |
 | 构造与互操作 | `FromSlice`、`FromSeq`、`Of`、`RangeWithSteps` | `FromMap`、`FromSeq2`、`FromPairs`、`Iter`、`Pairs` |
-| 形状与键转换 | `Map`、`FlatMap`、`FlatMap2`、`Enumerate`、`KeyBy`、`Associate` | `Map`、`MapKeys`、`FlatMap`、`FlatMap2`、`Keys`、`Values` |
+| 形状与键转换 | `Map`、`FlatMap`、`FlatMap2`、`Enumerate`、`KeyBy`、`Associate` | `MapValues`、`MapKeys`、`FlatMap`、`FlatMap2`、`Keys`、`Values` |
 | 筛选与窗口 | `Filter`、`Reject`、`UniqBy`、`Take`、`Drop` | 同名方法 |
 | 排序 | `SortBy`、`SortByDescending`、`Reverse` | 同名方法 |
 | 分组与归约 | `Reduce`、`GroupBy` | `Reduce`、`GroupPairsBy` |
@@ -83,7 +83,7 @@ type Pair[K comparable, V any] struct {
 | `Seq` 转换 | [`Iter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Iter)、[`Map`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Map)、[`Filter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Filter)、[`Reject`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Reject)、[`FlatMap`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.FlatMap)、[`FlatMap2`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.FlatMap2)、[`Take`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Take)、[`Drop`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Drop)、[`Enumerate`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Enumerate)、[`KeyBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.KeyBy)、[`Associate`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Associate) |
 | `Seq` 聚合与排序 | [`Reduce`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Reduce)、[`UniqBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.UniqBy)、[`SortBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.SortBy)、[`SortByDescending`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.SortByDescending)、[`Reverse`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Reverse) |
 | `Seq` 查询与物化 | [`Collect`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Collect)、[`First`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.First)、[`Last`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Last)、[`Find`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Find)、[`FindIndex`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.FindIndex)、[`SomeBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.SomeBy)、[`EveryBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.EveryBy)、[`Length`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.Length)、[`ForEach`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq.ForEach) |
-| `Seq2` 转换 | [`Iter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Iter)、[`Map`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Map)、[`MapKeys`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.MapKeys)、[`Filter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Filter)、[`Reject`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Reject)、[`FlatMap`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.FlatMap)、[`FlatMap2`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.FlatMap2)、[`Take`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Take)、[`Drop`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Drop) |
+| `Seq2` 转换 | [`Iter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Iter)、[`MapValues`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.MapValues)、[`MapKeys`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.MapKeys)、[`Filter`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Filter)、[`Reject`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Reject)、[`FlatMap`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.FlatMap)、[`FlatMap2`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.FlatMap2)、[`Take`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Take)、[`Drop`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Drop) |
 | `Seq2` 聚合与排序 | [`Reduce`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Reduce)、[`UniqBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.UniqBy)、[`SortBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.SortBy)、[`SortByDescending`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.SortByDescending)、[`Reverse`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Reverse) |
 | `Seq2` 查询与物化 | [`Collect`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Collect)、[`First`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.First)、[`Last`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Last)、[`Find`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Find)、[`FindIndex`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.FindIndex)、[`SomeBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.SomeBy)、[`EveryBy`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.EveryBy)、[`Length`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Length)、[`ForEach`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.ForEach)、[`Keys`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Keys)、[`Values`](https://pkg.go.dev/github.com/norniastar/lix#example-Seq2.Values) |
 
@@ -100,7 +100,7 @@ go test -run '^Example' ./...
 ```go
 result := lix.Of("a", "b").
 	Enumerate().
-	Map(func(index int, value string) string {
+	MapValues(func(index int, value string) string {
 		return fmt.Sprintf("%d:%s", index, value)
 	}).
 	Collect()
@@ -138,7 +138,7 @@ Go 会拒绝导致方法集无限实例化的泛型方法，因此 `GroupBy`、`
 
 ## 执行语义
 
-- `Map`、`Filter`、`Reject`、`FlatMap`、`Enumerate`、`KeyBy`、
+- `Map`、`MapValues`、`MapKeys`、`Filter`、`Reject`、`FlatMap`、`Enumerate`、`KeyBy`、
   `UniqBy`、`Take` 和 `Drop` 都是惰性的。
 - `SortBy`、`SortByDescending`、`Reverse` 和分组操作在返回序列被遍历时物化源数据。
 - `First`、`Find`、`FindIndex`、`SomeBy`、`EveryBy` 和 `Take` 会尽早停止上游迭代。
