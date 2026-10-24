@@ -6,11 +6,11 @@ import (
 	"github.com/norniastar/lix"
 )
 
-func ExampleSeq2_Map() {
+func ExampleSeq2_MapValues() {
 	result := lix.FromPairs([]lix.Pair[string, int]{
 		{Key: "one", Value: 1},
 		{Key: "two", Value: 2},
-	}).Map(func(_ string, value int) string {
+	}).MapValues(func(_ string, value int) string {
 		return fmt.Sprintf("value-%d", value)
 	}).Collect()
 

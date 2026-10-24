@@ -7,8 +7,17 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-24
+
+### 撤回
+
+- 撤回 `v1.0.0`：`Seq2.Map` 已重命名为 `Seq2.MapValues`。`v1.0.0` 尚未投入使用，
+  因此以撤回加补丁版本的方式发布，而不升级主版本。
+
 ### 变更
 
+- **破坏性**：`Seq2.Map` 重命名为 `Seq2.MapValues`，与 `Seq2.MapKeys` 和 `lo.MapValues` 的命名保持一致；
+  签名与行为不变，调用方只需替换方法名。
 - `GroupBy`、`GroupPairsBy` 改用“键到位置”的索引加有序分组切片，每个元素只需一次 map 查找。
   键大量重复时更快（基准：16 个分组快 18%–26%，365 个分组快 5%–13%）；
   键几乎全部唯一时耗时不变，内存增加约 29%。签名与行为不变。
@@ -44,5 +53,6 @@
 - `RangeWithSteps`、窗口、反转、去重、Pair 往返、稳定排序和分组性质的 Fuzz 测试。
 - 固定版本的本地变异测试与 CRAP 报告脚本。
 
-[Unreleased]: https://github.com/norniastar/lix/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/norniastar/lix/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/norniastar/lix/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/norniastar/lix/releases/tag/v1.0.0

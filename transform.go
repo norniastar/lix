@@ -127,8 +127,8 @@ func (s Seq[V]) Associate[K comparable, U any](mapper func(V) (K, U)) Seq2[K, U]
 	}
 }
 
-// Map 惰性转换每个值，并保留对应的键。
-func (s Seq2[K, V]) Map[U any](mapper func(K, V) U) Seq2[K, U] {
+// MapValues 惰性转换每个值，并保留对应的键。
+func (s Seq2[K, V]) MapValues[U any](mapper func(K, V) U) Seq2[K, U] {
 	return func(yield func(K, U) bool) {
 		for key, value := range s {
 			if !yield(key, mapper(key, value)) {
