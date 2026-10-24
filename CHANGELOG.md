@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+### 变更
+
+- `SortBy`、`SortByDescending` 的 `Seq` 与 `Seq2` 实现合并为共享的稳定排序帮助函数；
+  `Reverse` 改用 `slices.Backward`，`Collect` 改用 `slices.AppendSeq` 与 `maps.Collect`。
+  行为与性能不变。
+
 ### 文档
 
 - README 边界说明补充负数 `Take`/`Drop`、空序列 `Collect`、零值序列和 `Seq2` 键约束的语义。
@@ -14,7 +20,9 @@
 ### 测试
 
 - 新增全部中间操作的构造期惰性契约测试，以及带状态派生序列的可重复遍历契约测试。
-- 新增 `Collect`、`SortBy`、`Reverse`、`UniqBy`、`GroupBy`、`GroupPairsBy` 基准与手写循环基线。
+- 新增 `Collect`、`SortBy`、`Reverse`、`UniqBy`、`GroupBy`、`GroupPairsBy` 基准与手写循环基线，
+  覆盖 `Seq`、`Seq2` 和升降序变体。
+- 新增覆盖完整 `int` 范围的 `RangeWithSteps` Fuzz，以及 `Seq`/`Seq2` 升降序排序稳定性 Fuzz。
 
 ## [1.0.0] - 2026-08-22
 
