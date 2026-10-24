@@ -152,7 +152,15 @@ Go 会拒绝导致方法集无限实例化的泛型方法，因此 `GroupBy`、`
 
 ## 边界
 
-- `RangeWithSteps` 的 `step` 为零时返回空序列。
+- `RangeWithSteps` 的 `step` 为零时返回空序列；结果溢出 `int` 范围前停止。
+- `Take` 的 `count` 非正时返回空序列，`Drop` 的 `count` 非正时返回全部元素。
+  这与 `lo/it` 遇到负数参数时 panic 的行为不同。
+- `Seq.Collect` 对空序列返回非 nil 的空切片，而 `slices.Collect` 返回 nil；
+  `Seq2.Collect` 与 `maps.Collect` 一致，返回非 nil 的空 map。
+- 与标准库 `iter.Seq` 相同，零值 `Seq`、`Seq2` 是 nil 函数，遍历时会 panic；
+  空序列请使用 `lix.Of[T]()`。`FlatMap`、`FlatMap2` 的 mapper 同样不应返回零值序列。
+- `Seq2` 要求键可比较，以保证始终可以 `Collect` 为 map；
+  因此键类型不可比较的 `iter.Seq2` 无法通过 `FromSeq2` 转换。
 - 不提供基于反射的动态数据源转换。
 - 不支持通过字符串访问结构体字段；请使用类型安全的 selector。
 - 不向任意运行时目标指针写值；请使用 `Collect` 或 `Reduce`。

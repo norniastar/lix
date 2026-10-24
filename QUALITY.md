@@ -14,6 +14,20 @@
 go test -race -coverprofile=coverage.out ./...
 ```
 
+## Benchmark
+
+性能改动必须用基准数据证明，并同时比较 ns/op、B/op 和 allocs/op：
+
+```bash
+go test -run '^$' -bench . -count=6 ./... > old.txt
+# 应用改动后
+go test -run '^$' -bench . -count=6 ./... > new.txt
+benchstat old.txt new.txt
+```
+
+`BenchmarkPipelineHandwritten` 是手写循环基线，用于衡量迭代器组合的额外开销；
+`UniqBy`、`GroupBy` 和 `GroupPairsBy` 分别覆盖键大量重复和几乎全部唯一两种情况。
+
 ## Fuzz
 
 运行全部 Fuzz 目标，每个目标默认执行三秒：
